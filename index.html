@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collin Kwan</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e10;
+      --surface: #18181b;
+      --border: #2a2a2e;
+      --accent: #6c63ff;
+      --accent-dim: #6c63ff22;
+      --text: #e4e4e7;
+      --muted: #71717a;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2.5rem;
+      backdrop-filter: blur(12px);
+      background: rgba(14,14,16,.8);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Sections ── */
+    section { max-width: 780px; margin: 0 auto; padding: 6rem 2rem; }
+    section:first-of-type { padding-top: 9rem; }
+
+    h2 {
+      font-size: 1rem; font-weight: 600; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 2.5rem;
+    }
+
+    /* ── Avatar ── */
+    .avatar {
+      position: relative; width: 100px; height: 100px;
+      border-radius: 50%; margin-bottom: 1.5rem;
+      border: 2px solid var(--accent);
+      background: var(--surface);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .avatar img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .avatar-placeholder {
+      color: var(--muted); font-size: .8rem; font-weight: 600;
+      letter-spacing: .05em; text-transform: uppercase;
+      position: absolute;
+    }
+    .avatar img + .avatar-placeholder { display: none; }
+
+    /* ── Hero ── */
+    #about { text-align: left; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent-dim); color: var(--accent);
+      font-size: .8rem; font-weight: 600; letter-spacing: .08em;
+      padding: .3rem .8rem; border-radius: 99px;
+      border: 1px solid var(--accent); margin-bottom: 1.5rem;
+    }
+    #about h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.2rem; }
+    #about p { color: var(--muted); font-size: 1.05rem; max-width: 560px; margin-bottom: 2rem; }
+    .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .6rem 1.3rem; border-radius: var(--radius);
+      font-size: .9rem; font-weight: 600; text-decoration: none; transition: all .2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Experience ── */
+    .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+    .timeline-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      transition: border-color .2s;
+    }
+    .timeline-item:hover { border-color: var(--accent); }
+    .timeline-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: .5rem; }
+    .timeline-title { font-weight: 700; font-size: 1rem; }
+    .timeline-company { color: var(--accent); font-weight: 600; font-size: .9rem; margin-bottom: .15rem; }
+    .timeline-date { color: var(--muted); font-size: .8rem; white-space: nowrap; }
+    .timeline-item p { color: var(--muted); font-size: .92rem; }
+
+    /* ── Projects ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; }
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      display: flex; flex-direction: column; gap: .6rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .project-header { display: flex; justify-content: space-between; align-items: center; }
+    .project-name { font-weight: 700; font-size: 1rem; }
+    .project-link { color: var(--muted); font-size: .8rem; text-decoration: none; transition: color .2s; }
+    .project-link:hover { color: var(--accent); }
+    .project-desc { color: var(--muted); font-size: .9rem; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .2rem; }
+    .tag {
+      font-size: .75rem; font-weight: 600; padding: .2rem .6rem;
+      border-radius: 99px; background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    /* ── Skills ── */
+    .skills-grid { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .skill-pill {
+      padding: .4rem 1rem; border-radius: 99px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: .88rem; color: var(--text); transition: border-color .2s, color .2s;
+    }
+    .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Contact ── */
+    #contact { text-align: center; }
+    #contact h1 { font-size: 2rem; font-weight: 800; margin-bottom: .8rem; }
+    #contact p { color: var(--muted); margin-bottom: 2rem; }
+    .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 2rem;
+      color: var(--muted); font-size: .82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Divider ── */
+    .section-divider { border: none; border-top: 1px solid var(--border); }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      nav {
+        padding: .9rem 1.2rem;
+        justify-content: center;
+      }
+      .nav-links { gap: 1.2rem; }
+      .nav-links a { font-size: .82rem; }
+
+      section { padding: 4.5rem 1.2rem; }
+      section:first-of-type { padding-top: 7rem; }
+
+      #about h1 { font-size: 2rem; }
+      #about p { font-size: .95rem; }
+
+      .hero-links { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+
+      .projects-grid { grid-template-columns: 1fr; }
+
+      .timeline-header { flex-direction: column; gap: .25rem; }
+      .timeline-date { align-self: flex-start; }
+
+      #contact h1 { font-size: 1.6rem; }
+      .contact-links { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+<ul class="nav-links">
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section id="about">
+    <div class="avatar">
+      <img src="portrait.jpg" alt="Collin Kwan" onerror="this.style.display='none'" />
+      <span class="avatar-placeholder">Photo</span>
+    </div>
+    <div class="hero-badge">Available for opportunities</div>
+    <h1>Hi, I'm Collin Kwan.</h1>
+    <p>Software engineer passionate about building products that people love. I enjoy working across the full stack and turning complex problems into clean, simple solutions.</p>
+    <div class="hero-links">
+      <a class="btn btn-primary" href="mailto:kwan.collink@gmail.com">Get in touch</a>
+      <a class="btn btn-ghost" href="https://github.com" target="_blank">GitHub ↗</a>
+      <a class="btn btn-ghost" href="https://linkedin.com" target="_blank">LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ── Experience ── -->
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-header">
+          <div>
+            <div class="timeline-company">Company Name</div>
+            <div class="timeline-title">Software Engineer</div>
+          </div>
+          <div class="timeline-date">2024 – Present</div>
+        </div>
+        <p>Describe what you built or shipped here — keep it impact-first. What did you own, and what did it do for the team or users?</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-header">
+          <div>
+            <div class="timeline-company">Previous Company</div>
+            <div class="timeline-title">Software Engineer Intern</div>
+          </div>
+          <div class="timeline-date">Summer 2023</div>
+        </div>
+        <p>Highlight a project, a metric, or a technology you contributed to during your time here.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-header">
+          <div>
+            <div class="timeline-company">University Name</div>
+            <div class="timeline-title">B.S. Computer Science</div>
+          </div>
+          <div class="timeline-date">2020 – 2024</div>
+        </div>
+        <p>Relevant coursework, clubs, or achievements worth calling out.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ── Projects ── -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">Project Alpha</span>
+          <a class="project-link" href="#" target="_blank">View →</a>
+        </div>
+        <p class="project-desc">A short description of what this project does and why you built it. One or two sentences max.</p>
+        <div class="tag-row">
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Node.js</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">Project Beta</span>
+          <a class="project-link" href="#" target="_blank">View →</a>
+        </div>
+        <p class="project-desc">Describe this project in plain language. What problem does it solve? Who uses it?</p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">PostgreSQL</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <span class="project-name">Project Gamma</span>
+          <a class="project-link" href="#" target="_blank">View →</a>
+        </div>
+        <p class="project-desc">What makes this one interesting or technically challenging? Mention a key detail that shows depth.</p>
+        <div class="tag-row">
+          <span class="tag">Go</span>
+          <span class="tag">Redis</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ── Skills ── -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <span class="skill-pill">JavaScript</span>
+      <span class="skill-pill">TypeScript</span>
+      <span class="skill-pill">React</span>
+      <span class="skill-pill">Node.js</span>
+      <span class="skill-pill">Python</span>
+      <span class="skill-pill">Go</span>
+      <span class="skill-pill">PostgreSQL</span>
+      <span class="skill-pill">Redis</span>
+      <span class="skill-pill">Docker</span>
+      <span class="skill-pill">AWS</span>
+      <span class="skill-pill">Git</span>
+      <span class="skill-pill">CI/CD</span>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ── Contact ── -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <h1>Let's work together.</h1>
+    <p>I'm open to new roles, collabs, or just a good conversation about tech.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:kwan.collink@gmail.com">kwan.collink@gmail.com</a>
+      <a class="btn btn-ghost" href="https://github.com" target="_blank">GitHub</a>
+      <a class="btn btn-ghost" href="https://linkedin.com" target="_blank">LinkedIn</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by Collin Kwan &nbsp;·&nbsp; 2026</p>
+  </footer>
+
+</body>
+</html>
